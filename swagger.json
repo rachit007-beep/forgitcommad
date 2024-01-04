@@ -1,0 +1,212 @@
+{
+    "swagger":"2.0",
+    "info":{
+        "version":"1.0.0",
+        "description":"Hospital Api",
+        "title":"Covid registration portal"
+    },
+    "host":"localhost:4000",
+    "securityDefinitions":{
+      "JWT":{
+        "in":"headers",
+        "name":"Authorization",
+        "type":"apiKey"
+      }
+    },
+    "paths":{
+        "/api/doc/register":{
+            "post":{
+                "tags":["Registartion of Doctors"],
+                "summary":"registration",
+                "description":"registation of doctors",
+                "parameters":[{
+                    "in":"body",
+                    "name":"body",
+                    "description":"Registation Purpose",
+                    "schema":{
+                        "type":"object",
+                        "properties":{
+                            "username":{"type":"String"},
+                            "email":{"type":"String"},
+                            "password":{"type":"String"}
+                        }
+                    }
+                }],
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"Incorrect Credentials"
+                    }
+
+                }
+            }
+        },
+
+        "/api/doc/login":{
+            "post":{
+                "tags":["Doctor's Login"],
+                "summary":"login",
+                "description":"login for doctors",
+                "security":[{"JWT":{}}],
+                "parameters":[{
+                    "in":"body",
+                    "name":"body",
+                    "description":"users credentials",
+                    "schema":{
+                        "type":"object",
+                        "properties":{
+                            "email":{"type":"String"},
+                            "password":{"type":"String"}
+                        }
+                    }
+                }],
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "404":{
+                        "description":"Not Found"
+                    }
+
+                }
+            }
+
+
+        },
+
+        "/api/patients/registarion":{
+            "post":{
+                "tags":["Patient's Registration"],
+                "summary":"registartion",
+                "description":"registartion for patients",
+                "security":[{"JWT":{}}],
+                "parameters":[{
+                    "in":"body",
+                    "name":"body",
+                    "description":"patients credentials",
+                    "schema":{
+                        "type":"object",
+                        "properties":{
+                            "doctorId":{"type":"object"},
+                            "name":{"type":"String"},
+                            "contactNumber":{"type":"Number"},
+                            "email":{"type":"String"},
+                            "address":{"type":"String"}
+                        }
+                    }
+                }],
+                "responses":{
+                    "201":{
+                        "description":"Registartion completed"
+                    },
+                    "400":{
+                        "description":"Bad request"
+                    }
+
+                }
+            }
+
+
+        },
+
+       
+    
+        "/api/patients/{id}/create_report": {
+          "post": {
+            "tags":["Create reports for Patients"],
+            "summary": "Create report for patients",
+            "description": "Report for patients",
+            "security": [{"JWT": {}}],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "required": true,
+                "description": "ID of the patient",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "in": "body",
+                "name": "body",
+                "description": "Patients credentials",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "createdByDoctor": {"type": "string"},
+                    "status": {"type": "string"},
+                    "patientId": {"type": "string"} 
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "Patient Report Created"
+              },
+              "400": {
+                "description": "Bad request"
+              }
+            }
+          }
+        },
+
+        "/api/patients/{id}/all_reports":{
+          "get":{
+            "tags":["Get all reports of Specific Patient"],
+            "summary":"Get Reports",
+             "description":"Get all reports of Patient",
+             "security": [{"JWT": {}}],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "PatientID",
+                "required": true,
+                "description": "ID of the patient",
+                "schema": {
+                  "type": "string"
+                }
+              }],
+             "responses":{
+              "200":{
+                "description":"OK"
+              },
+              "404":{
+                "description":"Not Found"
+              }  
+             }
+          }
+      },
+
+      "/api/patients/reports/{status}":{
+        "get":{
+            "tags":["Get all reports with status"],
+          "summary":"Get Reports ",
+           "description":"Get all reports with status",
+           "security": [{"JWT": {}}],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "status",
+              "required": true,
+              "description": "Status of the patientss",
+              "schema": {
+                "type": "string"
+              }
+            }],
+           "responses":{
+            "200":{
+              "description":"OK"
+            },
+            "404":{
+              "description":"Not Found"
+            }  
+           }
+        }
+    }
+
+}
+}
