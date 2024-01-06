@@ -23,7 +23,8 @@ export class docModel{
     
     return result;
     }catch(err){
-      console.log(err)
+      throw Error(err.message);
+      
     }
    }
 }

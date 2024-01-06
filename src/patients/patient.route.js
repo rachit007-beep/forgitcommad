@@ -9,4 +9,5 @@ const patientRouter = express.Router();
 patientRouter.post('/registration',jwtToken,preg.registration);
 
 
+
 export {patientRouter};

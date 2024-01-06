@@ -26,13 +26,15 @@ export class Controller{
      const user =  await docModel.login(req.body);
      if(user){
         const pass = await bcrypt.compare(req.body.password,user.password);
+         if(pass){
         // jwt token for login
         const token = jwt.sign({
             userId:user._id,
             userName:user.username
-        },process.env.JWT_Secret,{ expiresIn: '1h' })
+        },JWT_Secret,{ expiresIn: '1h' })
       return  res.status(200).send(token);
      }
+    }
      res.status(404).send('not found')
     }catch(err){
         console.log(err);

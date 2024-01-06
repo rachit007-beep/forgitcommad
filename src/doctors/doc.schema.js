@@ -9,7 +9,7 @@ const docSchema = mongoose.Schema({
     password:{type:String,required:true,unique:true}
 })
 // model for doctors
-const model = mongoose.model('Pandemic',docSchema);
+const model = mongoose.model('Doctors',docSchema);
 
 export {model}
 
