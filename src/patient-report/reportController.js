@@ -9,16 +9,17 @@ export class ReportController{
         const pid = req.params;
         // getting doctor id from token
         const did = req.id;
+         const drname = req.drname;
          
-        const result = await ReportModel.add(req.body,pid,did);
-        if(!result){
-          return  res.status(400).send("Bad request");
+        const result = await ReportModel.add(req.body,drname,pid,did);
+        if(!result.success){
+          return  res.status(400).send(result);
         }
         else{
           return  res.status(201).send(result);
         }
     }catch(err){
-        console.log(err);
+        return res.status(500).send(err.message)
     }
     }
     //get all report of a patient from reportmodel
@@ -28,30 +29,36 @@ export class ReportController{
         const id =req.params;
 
         const result = await ReportModel.getAllreports(id);
-        if(!result){
-            return res.status(404).send('Not found');
+        if(!result.success){
+            return res.status(404).send(result);
         }
         else{
             return res.status(200).send(result);
         }
     }catch(err){
         console.log(err);
+       return res.status(500).send(err.message)
+        
     }
       }
        // this function for getting a status from report model
       async getStatus(req,res){
         try{
            const status = req.params
-           
+           console.log(status)
            const result = await ReportModel.getStatus(status);
-           if(!result){
-            res.status(404).send('not found');
+           
+           if(!result.success){
+            
+             res.status(200).send(result);
            }
            else{
-            res.status(200).send(result);
+            res.status(404).send(result);
+            
            }
         }catch(err){
-            console.log(err);
+            
+       return res.status(500).send(err.message)
         }
       }
 }

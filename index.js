@@ -9,6 +9,7 @@ import { reportRouter } from './src/patient-report/report.router.js';
 import apidocs from './swagger.json' assert {type:'json'};
 
 
+
 dotenv.config();
 const app = express();
 
@@ -26,10 +27,18 @@ app.use('/api/patients',patientRouter);
 // middleware for patient reports
 app.use('/api/patients',reportRouter);
 
-// middleware for if no url is matched
-app.use((req,res)=>{
-    res.status(404).send("<h1>404</h1><h3>Api not found!</h3>s")
+
+app.get('/api/err',(req,res)=>{
+    throw new ApiError("for checking",500);
 })
+
+
+// middleware for if no url is matched
+ app.use((req,res)=>{
+   return  res.status(404).send("<h1>404</h1><h3>url not found!</h3>s")
+ })
+ 
+
 // for listening a server
 app.listen(process.env.Port,()=>{
     connectdb();

@@ -2,6 +2,7 @@ import { docModel } from './doc.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+
 // controller for handling registation and login for doctors
 export class Controller{
 // registation of doctors
@@ -10,34 +11,46 @@ export class Controller{
     try{
         
         const result = await docModel.add(req.body);
-
+              console.log(result);
         if(!result){
             res.status(400).send("Please try again!")
         }
-         res.status(200).json(result);
+         res.status(200).send(result);
     }catch(err){
-        console.log(err);
+        res.status(500).send(err.message);
+        
 }
 }
 // for login of doctors
    async login(req,res){
-    try{
     
+    try{
      const user =  await docModel.login(req.body);
-     if(user){
-        const pass = await bcrypt.compare(req.body.password,user.password);
+     console.log(user)
+    if(user.success){
+        console.log(user);
+          const pass = await bcrypt.compare(req.body.password,user.details.password);
+          console.log(pass)
          if(pass){
         // jwt token for login
-        const token = jwt.sign({
-            userId:user._id,
-            userName:user.username
-        },JWT_Secret,{ expiresIn: '1h' })
-      return  res.status(200).send(token);
+        const token =  jwt.sign({
+            userId:user.details._id,
+            userName:user.details.username
+        },process.env.JWT_Secret,{ expiresIn: '2h' })
+      return  res.status(200).send({
+        success:true,
+        token:token
+      });
+    
      }
+     
     }
-     res.status(404).send('not found')
+    return res.status(400).json(user);
+    
     }catch(err){
         console.log(err);
+        return res.send(500).send(err.message);
     }
+
    }
 }

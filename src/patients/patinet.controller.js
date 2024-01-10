@@ -7,6 +7,8 @@ export class PatientController{
 // for adding a new patient
     async registration(req,res){
         console.log(req.body);
+        const drname = req.id
+        console.log(drname)
         try{
             
           const reg = await PatientModel.registration(req.body,req.id);

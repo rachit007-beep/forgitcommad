@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 const jwtToken = (req,res,next)=>{
 // 1.read the token 
-console.log(req.headers);
+
 const token = req.headers['authorization'];
-console.log(token)
+
 // 2. If no token return the error
 if(!token){
     return res.status(401).send('unauthorized');
@@ -13,11 +13,12 @@ try{
     
     const payload = jwt.verify(token,process.env.JWT_Secret);
     
-        console.log(payload);
+         console.log(payload);
         req.id = payload.userId;
+        req.drname = payload.userName;
     }catch(err){
         console.log(err);
-        res.status(401).send('Invalid! Please try again')
+      return  res.status(401).send('Invalid! Please try again')
     }
 
 next();
